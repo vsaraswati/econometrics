@@ -1,2 +1,2 @@
 # econometrics
-School assignments and other projects
+Class assignments and other miscelaneous projects
