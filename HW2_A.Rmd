@@ -1,0 +1,121 @@
+---
+title: "Econometrics Homework 2"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(stringr)
+library(base)
+library(dplyr)
+library(foreign)
+```
+
+The HW_2.dta STATA file was uploaded to google drive. The following command loads the file onto the console in R and assigns the dataset to the dataframe "HW2". There are 13 variables (columns) and 935 observations in this HW2 dataframe. The variables in HW2 are: "earnings", "hours", "IQ", "KWW", "educ", "exper", "tenure", "age", "married", "south", "urban", "meduc", "feduc"  
+
+```{r}
+
+#install.packages("readstata13")
+library(readstata13)
+
+HW2 <- read.dta13("https://drive.google.com/uc?export=download&id=0BwRfzi9aVM4HSXVRUDlPY3JsNEk")
+
+```
+
+Question 7 part a: 
+The director would like to better understand the data as it relates to salary, IQ test score, education. Provide the director descriptive statistics. Explain to the director what these mean.
+
+Answer:
+The variables/parameters "earnings", "IQ", "educ" is extracted from the dataframe "HW2" and asssigned to "Salary", "IQ", and "education". The variable "Salary"is set as the dependent variable while "IQ" & "education" are independent explanatory variables. A regression is run, and assigned to "Ya"   
+
+where:
+
+Salary = Intercept + (Coefficient)IQ + (Coefficient)education  
+
+```{r}
+Salary <- HW2$earnings
+IQ <- HW2$IQ
+education <- HW2$educ
+
+Ya <- lm(Salary ~ IQ + education, data = HW2)
+
+summary(Ya)
+
+```
+
+Question 7 part b:
+The director would like to know what portion of the sample lives in the south and urban areas as well as the proportion of the sample that is married. Your director believes that salaries are correlated with marital status, urbanization, as well as the region of residence. Is the director correct? Explain. 
+
+Answer:
+The variables "married", "south", and "urban" in the HW2 dataframe contain categorical information of either 1 or 0, where 1 represents YES and 0 represents No. "Salary" is the dependent variables while "married", "south", and "urban" are set as the independent explanatory variables. 
+
+The regression model is assigned to Yb where:
+Salary = Intercept + (Coefficient)married + (Coefficient)south + (Coefficient)urban
+
+
+```{r}
+
+married <- HW2$married
+south <- HW2$south
+urban <- HW2$urban
+
+Yb <- lm(Salary ~ married + south + urban, data = HW2)
+
+summary(Yb)
+
+```
+
+Question 7 part c:
+The director is wants to know what is the relationship between IQ and Salary. Estimate a simple regression where wage is the dependent variable and IQ is the independent variable of interest. Provide the director with all pertinent information to understand the relationship (I.E. explain the regression results to identify the relationship, the magnitude, the goodness of fit, and interpret the results).
+
+Answer:
+"Salary" is the dependent variable, "IQ" is the explanatory variable
+
+The regression is assigned to "Yc" where:
+
+Salary = Intercept + (Coefficient)IQ
+
+
+```{r}
+
+Yc <- lm(Salary ~ IQ, data = HW2)
+
+summary(Yc)
+
+plot(Salary ~ IQ, data = HW2)
+
+
+
+```
+
+Question 7 part d:
+The director wants to the know if the relationship holds if you compare wages and IQ instead of salary. Create a variable wage, where wage = weekly earnings / hours. Assume that there are four weeks in a month. Provide the director with all pertinent information to understand the relationship
+
+Answer:
+The variable "hours" is extracted from the "HW2" dataframe and assigned to h. 
+Wage = (earnings/4)*hours
+
+"Wage" is the dependent variable while "IQ" is the independent explanatory variable. The regression is assigned to "Yd" where:
+
+Wage = Intercept + (Coefficient)IQ
+
+
+
+```{r}
+h <- HW2$hours
+Wage <- (Salary/4)/h
+
+Yd <- lm(Wage ~ IQ, data = HW2)
+
+summary(Yd)
+
+plot(Wage ~ IQ, data = HW2)
+
+
+
+
+```
+
+
+
